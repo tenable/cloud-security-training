@@ -1,4 +1,4 @@
-# VPC Endpoint and EC2 Credentials Exfiltration Mitigation Demonstration 
+# VPC Endpoint and EC2 Credentials Exfiltration Mitigation Lab 
 
 ## About 
 
