@@ -104,7 +104,7 @@ As always - after being done with the demonstration - clean up the environment b
 
     terraform destroy  
 
-(confirm with yes)
+(make sure you're OK with the deletion of the resources and confirm with "yes")
 
 ## Conclusion 
 
