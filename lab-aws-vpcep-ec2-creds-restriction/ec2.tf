@@ -19,7 +19,7 @@ resource "aws_key_pair" "vpcep-demo" {
 } 
 
 resource "aws_instance" "public" {
-  ami           = "ami-0c94855ba95c71c99"
+  ami           = var.ami_of_choice
   instance_type = "t2.micro"
   key_name      = "vpcep-demo-keypair"
   subnet_id     = aws_subnet.public.id
@@ -33,7 +33,7 @@ resource "aws_instance" "public" {
 }
 
 resource "aws_instance" "private" {
-  ami           = "ami-0c94855ba95c71c99"
+  ami           = var.ami_of_choice
   instance_type = "t2.micro"
   key_name      = "vpcep-demo-keypair"
   subnet_id     = aws_subnet.private.id

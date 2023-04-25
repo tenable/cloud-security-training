@@ -14,7 +14,7 @@ terraform {
 # Download any stable version in AWS provider of 2.36.0 or higher in 2.36 train
 provider "aws" {
   profile = var.aws_profile
-  region  = "us-east-1"
+  region  = var.region
 }
 
 provider "tls" {} 
