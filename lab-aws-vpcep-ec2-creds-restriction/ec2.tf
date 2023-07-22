@@ -1,3 +1,12 @@
+data "aws_ami" "amazon-linux-2" {
+  most_recent = true
+  owners      = ["amazon"] 
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-2.0.*-x86_64-ebs"]
+  }
+}
+
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
   rsa_bits  = "4096"
@@ -19,7 +28,7 @@ resource "aws_key_pair" "vpcep-demo" {
 } 
 
 resource "aws_instance" "public" {
-  ami           = var.ami_of_choice
+  ami           = data.aws_ami.amazon-linux-2.id
   instance_type = "t2.micro"
   key_name      = "vpcep-demo-keypair"
   subnet_id     = aws_subnet.public.id
@@ -33,7 +42,7 @@ resource "aws_instance" "public" {
 }
 
 resource "aws_instance" "private" {
-  ami           = var.ami_of_choice
+  ami           = data.aws_ami.amazon-linux-2.id
   instance_type = "t2.micro"
   key_name      = "vpcep-demo-keypair"
   subnet_id     = aws_subnet.private.id

@@ -21,11 +21,6 @@ variable "restrict_ec2_instances_credentials" {
   type        = bool 
   default     = false   
 }
-variable "ami_of_choice" {
-  description = "The AMI for deploying the EC2 instances"
-  type = string 
-  default = "ami-03c7d01cf4dedc891" # Amazon Linux 2 
-}
 variable "region" {
   description = "Default region for deployment"
   type = string 
