@@ -14,9 +14,9 @@ During each step of the playbook, make sure you explore the resources created in
 
 The deployment includes a very basic architecture of a VPC with two subnets - one public and one private - each with an EC2 instance and a VPC endpoint (for demonstration purposes, not provisioned in the initial version of the script - see playbook below) for S3 in us-east-1 (the default region where the script is deployed). 
 
-![Project Architecture][vpc-architecture]
+Since the action used in the demonstration is listing existing S3 buckets in an account, three example buckets are also deployed in case no buckets exist in the account. 
 
-Since the action used in the demonstration is listing existing S3 buckets in an account, it's recommended to run it on an account with existing S3 buckets. 
+![Project Architecture][vpc-architecture]
  
 ## Playbook 
 
