@@ -1,4 +1,4 @@
-# Lab: Remote Deploy POC of aws-imds-packet-analyzer  
+# Lab: Deploy and Test POC of aws-imds-packet-analyzer  
 
 ## TL;DR 
 
@@ -14,7 +14,7 @@ The library is another excellent example of AWS supporting its customers in enfo
 
 ### Important Notes 
 - This lab is meant for experimentation and learning purposes ONLY! We do not recommend using it in production envrionments and certainly not without proper testing.
-- The project architecture was designed to quickly demonstrate the deployment of the aws-imds-packet-analyzer library and show how it is *possible* to do the deployment remotely. It is not necessarily a recommended architecture for any kind of instance - for example, the instance deployed is public to the internet (to make it easy to download aws-imds-packet-analyzer and its dependencies); for other purposes, the architecture can and should be designed differently.
+- The project architecture was designed to quickly demonstrate the deployment of the aws-imds-packet-analyzer library. It is not necessarily a recommended architecture for any kind of instance - for example, the instance deployed is public to the internet (to make it easy to download aws-imds-packet-analyzer and its dependencies); for other purposes, the architecture can and should be designed differently.
 - Before using the lab, make sure you are aware of and prepared to cover any costs its use may entail. 
 
 ## Why aws-imds-packet-analyzer Matters 
@@ -31,7 +31,7 @@ AWS offers several tools for detecting calls to IMDSv1. This library enables you
 
 The lab deploys a VPC, a public subnet along with an Internet Gateway, and an EC2 instance with an Amazon Linux 2 AMI, a public IP and IMDSv1 enabled.  
 
-Along with the provisioning of the infrastructure, an SSH key and corresponding key pair are created along with a bash script to perform the installation of aws-imds-packet-analyzer remotely. 
+Along with the provisioning of the infrastructure, an SSH key and corresponding key pair are created along with a bash script to perform the installation of aws-imds-packet-analyzer. 
  
 ## Playbook 
 
@@ -85,7 +85,7 @@ Be sure to note it shows you not only when a call was made and which version of 
 
 And that's that! 
 
-You've now remotely deployed and tested aws-imds-packet-analyzer. You can imagine how far you can take this approach at scale.
+You've now deployed and tested aws-imds-packet-analyzer. You can imagine how far you can take this approach at scale.
 
 ### Clean-up
 
