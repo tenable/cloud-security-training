@@ -27,25 +27,33 @@ resource "aws_security_group" "ec2-ssh-security-group" {
   }
 }
 
+resource "aws_security_group_rule" "ingress_eic_to_ec2" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  security_group_id = "${aws_security_group.ec2-ssh-security-group.id}"
+  source_security_group_id = "${aws_security_group.eic-ssh-security-group.id}"
+}
+
 resource "aws_security_group_rule" "ingress_client_to_ec2" {
   type                     = "ingress"
   from_port                = 22
   to_port                  = 22
   protocol                 = "tcp"
-  security_group_id = aws_security_group.ec2-ssh-security-group.id
-  cidr_blocks       =  ["${var.client_ip}/32"]
+  security_group_id = "${aws_security_group.ec2-ssh-security-group.id}"
+  cidr_blocks       =  ["${var.client_public_ip}/32"]
 }
 
 #EC2 Instance
-resource "aws_instance" "ubuntu-ec2-packet-analyzer-demo" {
+resource "aws_instance" "ec2-instance-packet-analyzer-demo" {
     ami = data.aws_ami.amazon-linux-2.id
     instance_type = "t2.micro"
     subnet_id = aws_subnet.public.id
     associate_public_ip_address = true
-    key_name = aws_key_pair.key_pair.key_name
-
+     
     vpc_security_group_ids = [
-        aws_security_group.ec2-ssh-security-group.id
+        "${aws_security_group.ec2-ssh-security-group.id}"
     ]
     
     metadata_options {
@@ -60,6 +68,6 @@ resource "aws_instance" "ubuntu-ec2-packet-analyzer-demo" {
     }
 
     tags = {
-        Name = "ubuntu-ec2-packet-analyzer-demo"
+        Name = "ec2-instance-packet-analyzer-demo"
     }
 }

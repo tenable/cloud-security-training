@@ -31,7 +31,7 @@ AWS offers several tools for detecting calls to IMDSv1. This library enables you
 
 The lab deploys a VPC, a public subnet along with an Internet Gateway, and an EC2 instance with an Amazon Linux 2 AMI, a public IP and IMDSv1 enabled.  
 
-Along with the provisioning of the infrastructure, an SSH key and coressponding key pair are created along with a bash script to perform the installation of aws-imds-packet-analyzer remotely.   
+Along with the provisioning of the infrastructure, an SSH key and corresponding key pair are created along with a bash script to perform the installation of aws-imds-packet-analyzer remotely. 
  
 ## Playbook 
 
@@ -43,39 +43,37 @@ First, init Terraform:
 
 Then, make sure the AWS_PROFILE and AWS_REGION environment variables are properly configured locally. 
 
-Next, we'll deploy the infrastructure. Terraform will need the value of the IP for your local machine (to allow it to SSH to the machine created) in the variable *client_ip*, so the apply command should look like this: 
+Next, we'll deploy the infrastructure. Terraform will need the value of the **public** IP for your local machine (to allow it to SSH to the machine created) in the variable *client_public_ip*, so the apply command should look like this: 
 
-    terraform apply -var="client_ip=<CLIENT_IP>"
+    terraform apply -var="client_public_ip=<CLIENT_PUBLIC_IP>"
 
 (confirm the deploy with "yes")
 
-As output, you will get two commands - one to perform the installation of the open source library, and the other one to SSH into the instance for further exploration. We recommend that you copy and paste both commands on the side.   
+As output, you will get the command to SSH into the machine created using the [EC2 instance connect service](https://aws.amazon.com/blogs/compute/secure-connectivity-from-public-to-private-introducing-ec2-instance-connect-endpoint-june-13-2023/).   
 
 ### Installing aws-imds-packet-analyzer 
 
-Run the *install_imds_packet_analyzer_remotely* command to run the bash script created by the Terraform deployment on the EC2 instance and install the open source library and its dependencies on it. It then sets up aws-imds-packet-analyzer to run persistently (using the [forever.js](https://www.npmjs.com/package/forever) library). The script will output logs to your console. 
+Connect to the machine using the command received in the previous step and run the [install_imds_packet_analzyer.sh](script/install_imds_packet_analzyer.sh) script within it. Find the script in the [script](script/) folder of this repository. 
 
-The command should look something like this: 
+The easiest way to run the script is to simply copy and paste its contents to the terminal. 
 
-    ssh -i packet_analyzer_imds_demo ec2-user@<EC2_INSTANCE_PUBLIC_IP> 'bash -s' < install_imds_packet_analzyer.sh 
+The script will install and set up aws-imds-packet-analyzer to run as a Linux service.
 
-**Note:** We strongly recommend that you review the install_imds_packet_analzyer.sh script before execution as it is a good practice to do so with any script you haven't created.  
+**Note:** We strongly recommend that you review the install_imds_packet_analzyer.sh script before execution as doing so is good practice with any script you haven't created.  
 
-### Taking The Packet Analyzer Out for a Spin 
+### Taking the Packet Analyzer Out for a Spin 
 
-You can now SSH into the machine using the SSH command that was output by the Terraform deployment. The command will look something like this: 
+Once the installation is done, you should be able to view the status of the newly created service with the following command: 
 
-    ssh -i packet_analyzer_imds_demo ec2-user@<EC2_INSTANCE_PUBLIC_IP>
+    sudo systemctl status imds_packet_analyzer_service 
 
-If you didn't set aside the SSH command, don't worry, you can regenerate it using:  
+Once you've made sure it's up and running, let's try it out. 
 
-    terraform output
-
-Once you're in, you can call this command to create a record in the log for an IMDSv1 call: 
+You can use this command to create a record in the log for an IMDSv1 call: 
 
     curl http://169.254.169.254/latest/meta-data/   
 
-Now (while still SSH'd into the machine), you can view the log by cat'ing the local log file: 
+Now (while still SSH'd into the machine) you can view the log by cat'ing the local log file:  
 
     sudo cat /var/log/imds/imds-trace.log 
 
@@ -93,7 +91,7 @@ You've now remotely deployed and tested aws-imds-packet-analyzer. You can imagin
 
 As always, after completing the demonstration, clean up the environment by running (make sure you exit the SSH connection of course):
 
-    terraform destroy -var="client_ip=<CLIENT_IP>"
+    terraform destroy -var="client_public_ip=<CLIENT_PUBLIC_IP>"
 
 Make sure you're OK with the deletion of the resources and confirm with "yes".
 
