@@ -50,6 +50,11 @@ resource "aws_instance" "private" {
   
   iam_instance_profile = aws_iam_instance_profile.instance_profile_list_all_buckets.name 
 
+  metadata_options {
+      http_endpoint = "enabled"
+      http_tokens = "optional"
+  } 
+
   tags = {
     Name = "private-instance"
   }
