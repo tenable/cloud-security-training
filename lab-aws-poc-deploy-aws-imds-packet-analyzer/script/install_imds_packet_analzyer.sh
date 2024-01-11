@@ -1,11 +1,19 @@
 #!bin/bash 
 
+sudo yum -y update 
+sudo yum -y install wget.x86_64
+sudo yum -y install unzip  
+
 sudo amazon-linux-extras enable BCC
-sudo yum -y install kernel-devel-$(uname -r)
+sudo yum -y install bcc 
+sudo yum -y clean metadata 
 sudo yum -y install bcc 
 
+sudo yum -y install kernel-devel-$(uname -r)
+
+rm -r main.zip 
 wget https://github.com/aws/aws-imds-packet-analyzer/archive/refs/heads/main.zip 
-unzip main.zip 
+sudo unzip main.zip
 
 # Path to the Python script
 python_script="/home/ec2-user/aws-imds-packet-analyzer-main/src/imds_snoop.py"
