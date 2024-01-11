@@ -8,6 +8,11 @@ data "aws_ami" "amazon-linux-2" {
   }
 }
 
+data "aws_ip_ranges" "ec2_instance_connect_ip_range" {
+  regions  = [var.aws_region]
+  services = ["EC2_INSTANCE_CONNECT"]
+}
+
 #Security Groups
 resource "aws_security_group" "ec2-ssh-security-group" {
   name = "ec2-ssh-public-access"
@@ -27,22 +32,13 @@ resource "aws_security_group" "ec2-ssh-security-group" {
   }
 }
 
-resource "aws_security_group_rule" "ingress_eic_to_ec2" {
-  type                     = "ingress"
-  from_port                = 22
-  to_port                  = 22
-  protocol                 = "tcp"
-  security_group_id = "${aws_security_group.ec2-ssh-security-group.id}"
-  source_security_group_id = "${aws_security_group.eic-ssh-security-group.id}"
-}
-
 resource "aws_security_group_rule" "ingress_client_to_ec2" {
   type                     = "ingress"
   from_port                = 22
   to_port                  = 22
   protocol                 = "tcp"
   security_group_id = "${aws_security_group.ec2-ssh-security-group.id}"
-  cidr_blocks       =  ["${var.client_public_ip}/32"]
+  cidr_blocks       =  data.aws_ip_ranges.ec2_instance_connect_ip_range.cidr_blocks
 }
 
 #EC2 Instance

@@ -23,15 +23,13 @@ Before enforcing IMDSv2 (basically, disabling IMDSv1) you need to make sure that
 
 AWS offers several tools for detecting calls to IMDSv1. This library enables you not only to know which calls were made but also which process made them, as well as which process triggered the process that made the call, which process triggered the process that triggered it, etc. Such information is invaluable for executing a procedure that replaces the code making the request with a version updated to use IMDSv2, enabling you to retire IMDSv1. 
 
-## Project Architecture 
-
-![Project Architecture][packet-analyzer-architecture]
-
 ## How This Lab Works 
 
 The lab deploys a VPC, a public subnet along with an Internet Gateway, and an EC2 instance with an Amazon Linux 2 AMI, a public IP and IMDSv1 enabled.  
 
-Along with the provisioning of the infrastructure, an SSH key and corresponding key pair are created along with a bash script to perform the installation of aws-imds-packet-analyzer. 
+The EC2 instance has a security group which enables it to be accessed using EC2 instance connect in the region where its deployed. 
+
+After provisioning the infrastructure, you're supposed to connect to the EC2 instance, run the installation script and explore the packet analyzer operation as detailed in the playbook below. 
  
 ## Playbook 
 
@@ -43,17 +41,17 @@ First, init Terraform:
 
 Then, make sure the AWS_PROFILE and AWS_REGION environment variables are properly configured locally. 
 
-Next, we'll deploy the infrastructure. Terraform will need the value of the **public** IP for your local machine (to allow it to SSH to the machine created) in the variable *client_public_ip*, so the apply command should look like this: 
+Next, we'll deploy the infrastructure:
 
-    terraform apply -var="client_public_ip=<CLIENT_PUBLIC_IP>"
+    terraform apply
 
 (confirm the deploy with "yes")
-
-As output, you will get the command to SSH into the machine created using the [EC2 instance connect service](https://aws.amazon.com/blogs/compute/secure-connectivity-from-public-to-private-introducing-ec2-instance-connect-endpoint-june-13-2023/).   
-
+    
 ### Installing aws-imds-packet-analyzer 
 
-Connect to the machine using the command received in the previous step and run the [install_imds_packet_analzyer.sh](script/install_imds_packet_analzyer.sh) script within it. Find the script in the [script](script/) folder of this repository. 
+You should be able to connect to the newly created EC2 instance (called ec2-instance-packet-analyzer-demo) from the EC2 console. 
+
+Once logged on to the machine, run the [install_imds_packet_analzyer.sh](script/install_imds_packet_analzyer.sh) script within it. Find the script in the [script](script/) folder of this repository. 
 
 The easiest way to run the script is to simply copy and paste its contents to the terminal. 
 
@@ -91,7 +89,7 @@ You've now deployed and tested aws-imds-packet-analyzer. You can imagine how far
 
 As always, after completing the demonstration, clean up the environment by running (make sure you exit the SSH connection of course):
 
-    terraform destroy -var="client_public_ip=<CLIENT_PUBLIC_IP>"
+    terraform destroy
 
 Make sure you're OK with the deletion of the resources and confirm with "yes".
 
